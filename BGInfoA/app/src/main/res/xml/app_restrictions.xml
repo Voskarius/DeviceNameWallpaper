@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+    <restriction
+        android:key="device_name"
+        android:title="Device Name"
+        android:restrictionType="choice"
+        android:defaultValue="{{DeviceName}}"
+        android:entryValues="@array/device_name"
+        android:entries="@array/deviceDesc">
+    </restriction>
+
+</restrictions>

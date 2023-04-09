@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BGInfoA</string>
+    <string-array name="device_name">
+        <item>{{DeviceName}}</item>
+    </string-array>
+    <string-array name="deviceDesc">
+        <item>{{DeviceName}}</item>
+    </string-array>
+</resources>
