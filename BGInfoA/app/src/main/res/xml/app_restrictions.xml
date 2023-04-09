@@ -8,5 +8,10 @@
         android:entryValues="@array/device_name"
         android:entries="@array/deviceDesc">
     </restriction>
+    <restriction
+        android:key="signature"
+        android:title="Signature"
+        android:restrictionType="string">
+    </restriction>
 
 </restrictions>

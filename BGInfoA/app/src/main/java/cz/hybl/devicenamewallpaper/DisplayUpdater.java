@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -28,6 +29,7 @@ import java.util.HashSet;
 
 public class DisplayUpdater {
     private static final String DEVICE_NAME_RESTRICTION_NAME = "device_name";
+    private static final String SIGNATURE_RESTRICTION_NAME = "signature";
 
     private static final String NAME_METHOD = "https://prod-160.westeurope.logic.azure.com/workflows/91494e5ca9b14883af6c135fd407518a/triggers/manual/paths/invoke/device/";
 
@@ -63,14 +65,15 @@ public class DisplayUpdater {
         RestrictionsManager restrictionsManager = context.getSystemService(RestrictionsManager.class);
         // Get the current configuration bundle
         // String deviceName = "05b225ee-2985-47a0-af32-de43d86e8c00";
+        Bundle appRestrictions = restrictionsManager.getApplicationRestrictions();
+        String deviceName = appRestrictions.getString(DEVICE_NAME_RESTRICTION_NAME);
+        String signature = appRestrictions.getString(SIGNATURE_RESTRICTION_NAME);
 
-        String deviceName = restrictionsManager.getApplicationRestrictions()
-                .getString(DEVICE_NAME_RESTRICTION_NAME);
         if (deviceName == null) {
             Toast.makeText(context, "Cannot update wallpaper - device name not known",
                     Toast.LENGTH_SHORT).show();
         } else {
-            new GetNameTask(context, width, height).execute(deviceName);
+            new GetNameTask(context, width, height).execute(deviceName, signature);
         }
     }
 
@@ -92,7 +95,7 @@ public class DisplayUpdater {
                         + "?api-version=" + URLEncoder.encode("2016-10-01", ENCODING)
                         + "&sp=" + URLEncoder.encode("/triggers/manual/run", ENCODING)
                         + "&sv=" + URLEncoder.encode("1.0", ENCODING)
-                        + "&sig=" + URLEncoder.encode("BXyRNPnErKdoQFtUjcOgscVGtVwzCOJlzvpO7f-zsMI", ENCODING));
+                        + "&sig=" + URLEncoder.encode(strings[1], ENCODING));
 
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
@@ -128,8 +131,7 @@ public class DisplayUpdater {
             KeyedAppStatesReporter keyedAppStatesReporter = KeyedAppStatesReporter.create(context.get());
             keyedAppStatesReporter.setStates(states);
 
-            Toast.makeText(context.get(), "Wallpaper updated",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.get(), "Wallpaper updated", Toast.LENGTH_SHORT).show();
         }
     }
 }
